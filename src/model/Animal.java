@@ -11,24 +11,6 @@ public class Animal {
     private double peso;
     private int idProprietario;
 
-    public Animal(String nome, String especie, String raca, LocalDate dataNascimento, double peso, int idProprietario) {
-        this.nome = nome;
-        this.especie = especie;
-        this.raca = raca;
-        this.dataNascimento = dataNascimento;
-        this.peso = peso;
-        this.idProprietario = idProprietario;
-    }
-
-    public Animal(int id, String nome, String especie, String raca, LocalDate dataNascimento, double peso) {
-        this.id = id;
-        this.nome = nome;
-        this.especie = especie;
-        this.raca = raca;
-        this.dataNascimento = dataNascimento;
-        this.peso = peso;
-    }
-
     public Animal(int id, String nome, String especie, String raca, LocalDate dataNascimento, double peso, int idProprietario) {
         this.id = id;
         this.nome = nome;
@@ -93,5 +75,10 @@ public class Animal {
 
     public void setIdProprietario(int idProprietario) {
         this.idProprietario = idProprietario;
+    }
+
+    @Override
+    public String toString() {
+        return "Animal{" + "id=" + id + ", nome='" + nome + '\'' + ", especie='" + especie + '\'' + ", raca='" + raca + '\'' + ", dataNascimento=" + dataNascimento + ", peso=" + peso + ", idProprietario=" + idProprietario + '}';
     }
 }

@@ -3,40 +3,32 @@ package dao;
 import model.Veterinario;
 import utils.DatabaseHandler;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class VeterinarioDAO implements IDAO<Veterinario> {
-
     String sql;
 
     @Override
     public ArrayList<Veterinario> getAll() {
         sql = """
-                SELECT v.id, v.nome, v.crmv,
-                       v.id_especialidade, e.nome AS especialidade,
-                       v.id_telefone, t.numero AS telefone
-                FROM veterinario v
-                INNER JOIN especialidade e ON e.id = v.id_especialidade
-                INNER JOIN telefone t ON t.id = v.id_telefone;
-              """;
+                  SELECT v.id, v.nome, v.crmv,
+                         v.id_especialidade, e.nome AS especialidade,
+                         v.id_telefone, t.numero AS telefone
+                  FROM veterinario v
+                  INNER JOIN especialidade e ON e.id = v.id_especialidade
+                  INNER JOIN telefone t ON t.id = v.id_telefone;
+                """;
 
         ArrayList<Veterinario> veterinarios = new ArrayList<>();
 
-        try (Connection connection = DatabaseHandler.getConnection();
-             PreparedStatement stm = connection.prepareStatement(sql);
-             ResultSet rs = stm.executeQuery()) {
+        try (Connection connection = DatabaseHandler.getConnection(); PreparedStatement stm = connection.prepareStatement(sql); ResultSet rs = stm.executeQuery()) {
 
             while (rs.next()) {
-                Veterinario v = new Veterinario(
-                        rs.getInt("id"),
-                        rs.getString("nome"),
-                        rs.getString("crmv"),
-                        rs.getInt("id_especialidade"),
-                        rs.getString("especialidade"),
-                        rs.getInt("id_telefone"),
-                        rs.getString("telefone")
-                );
+                Veterinario v = new Veterinario(rs.getInt("id"), rs.getString("nome"), rs.getString("crmv"), rs.getInt("id_especialidade"), rs.getString("especialidade"), rs.getInt("id_telefone"), rs.getString("telefone"));
                 veterinarios.add(v);
             }
 
@@ -50,31 +42,22 @@ public class VeterinarioDAO implements IDAO<Veterinario> {
     @Override
     public Veterinario getById(int id) {
         sql = """
-                SELECT v.id, v.nome, v.crmv,
-                       v.id_especialidade, e.nome AS especialidade,
-                       v.id_telefone, t.numero AS telefone
-                FROM veterinario v
-                INNER JOIN especialidade e ON e.id = v.id_especialidade
-                INNER JOIN telefone t ON t.id = v.id_telefone
-                WHERE v.id = ?;
-              """;
+                  SELECT v.id, v.nome, v.crmv,
+                         v.id_especialidade, e.nome AS especialidade,
+                         v.id_telefone, t.numero AS telefone
+                  FROM veterinario v
+                  INNER JOIN especialidade e ON e.id = v.id_especialidade
+                  INNER JOIN telefone t ON t.id = v.id_telefone
+                  WHERE v.id = ?;
+                """;
 
-        try (Connection connection = DatabaseHandler.getConnection();
-             PreparedStatement stm = connection.prepareStatement(sql)) {
+        try (Connection connection = DatabaseHandler.getConnection(); PreparedStatement stm = connection.prepareStatement(sql)) {
 
             stm.setInt(1, id);
             try (ResultSet rs = stm.executeQuery()) {
                 if (!rs.next()) return null;
 
-                return new Veterinario(
-                        rs.getInt("id"),
-                        rs.getString("nome"),
-                        rs.getString("crmv"),
-                        rs.getInt("id_especialidade"),
-                        rs.getString("especialidade"),
-                        rs.getInt("id_telefone"),
-                        rs.getString("telefone")
-                );
+                return new Veterinario(rs.getInt("id"), rs.getString("nome"), rs.getString("crmv"), rs.getInt("id_especialidade"), rs.getString("especialidade"), rs.getInt("id_telefone"), rs.getString("telefone"));
             }
 
         } catch (SQLException e) {
@@ -125,10 +108,10 @@ public class VeterinarioDAO implements IDAO<Veterinario> {
         if (getById(id) == null) return null;
 
         sql = """
-                UPDATE veterinario
-                SET nome = ?, crmv = ?, id_especialidade = ?
-                WHERE id = ?;
-              """;
+                  UPDATE veterinario
+                  SET nome = ?, crmv = ?, id_especialidade = ?
+                  WHERE id = ?;
+                """;
 
         try (Connection connection = DatabaseHandler.getConnection()) {
 
@@ -156,8 +139,7 @@ public class VeterinarioDAO implements IDAO<Veterinario> {
     public void delete(int id) {
         sql = "DELETE FROM veterinario WHERE id = ?";
 
-        try (Connection connection = DatabaseHandler.getConnection();
-             PreparedStatement stm = connection.prepareStatement(sql)) {
+        try (Connection connection = DatabaseHandler.getConnection(); PreparedStatement stm = connection.prepareStatement(sql)) {
 
             stm.setInt(1, id);
             stm.executeUpdate();

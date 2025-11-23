@@ -1,8 +1,6 @@
 package model;
 
 import java.time.LocalDateTime;
-import model.Animal;
-import model.Veterinario;
 
 public class Consulta {
 
@@ -24,7 +22,6 @@ public class Consulta {
         this.valor = valor;
     }
 
-
     public Animal getAnimal() {
         return animal;
     }
@@ -42,26 +39,39 @@ public class Consulta {
     }
 
     public int getId() {
-        return id; }
+        return id;
+    }
 
     public void setId(int id) {
-        this.id = id; }
+        this.id = id;
+    }
 
     public LocalDateTime getHorarioConsulta() {
-        return horarioConsulta; }
+        return horarioConsulta;
+    }
 
     public void setHorarioConsulta(LocalDateTime horarioConsulta) {
-        this.horarioConsulta = horarioConsulta; }
+        this.horarioConsulta = horarioConsulta;
+    }
+
     public String getDiagnostico() {
-        return diagnostico; }
+        return diagnostico;
+    }
 
     public void setDiagnostico(String diagnostico) {
-        this.diagnostico = diagnostico; }
+        this.diagnostico = diagnostico;
+    }
 
     public double getValor() {
-        return valor; }
+        return valor;
+    }
 
     public void setValor(double valor) {
         this.valor = valor;
+    }
+
+    @Override
+    public String toString() {
+        return "Consulta{" + "id=" + id + ", horarioConsulta=" + horarioConsulta + ", animal=" + animal + ", veterinario=" + veterinario + ", diagnostico='" + diagnostico + '\'' + ", valor=" + valor + '}';
     }
 }

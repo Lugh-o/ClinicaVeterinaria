@@ -1,7 +1,6 @@
 package model;
 
 public class Veterinario {
-
     private int id;
     private String nome;
     private String crmv;
@@ -19,8 +18,6 @@ public class Veterinario {
         this.idTelefone = idTelefone;
         this.telefone = telefone;
     }
-
-    public Veterinario() {}
 
     public int getId() {
         return id;
@@ -76,5 +73,10 @@ public class Veterinario {
 
     public void setTelefone(String telefone) {
         this.telefone = telefone;
+    }
+
+    @Override
+    public String toString() {
+        return "Veterinario{" + "id=" + id + ", nome='" + nome + '\'' + ", crmv='" + crmv + '\'' + ", idEspecialidade=" + idEspecialidade + ", especialidade='" + especialidade + '\'' + ", idTelefone=" + idTelefone + ", telefone='" + telefone + '\'' + '}';
     }
 }

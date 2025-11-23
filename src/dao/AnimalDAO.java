@@ -11,15 +11,22 @@ public class AnimalDAO implements IDAO<Animal> {
     public ArrayList<Animal> getAll() {
         String sql = """
                     SELECT
-                        a.id, a.nome, a.especie, a.raca, a.data_nascimento, a.peso
+                        a.id, a.nome, a.especie, a.raca, a.data_nascimento, a.peso, a.id_proprietario
                     FROM animal a;
                 """;
         ArrayList<Animal> animais = new ArrayList<>();
 
         try (Connection connection = DatabaseHandler.getConnection(); PreparedStatement statement = connection.prepareStatement(sql); ResultSet resultSet = statement.executeQuery()) {
             while (resultSet.next()) {
-                Animal a = new Animal(resultSet.getInt("id"), resultSet.getString("nome"), resultSet.getString("especie"), resultSet.getString("raca"), resultSet.getDate("data_nascimento").toLocalDate(), resultSet.getDouble("peso"));
-                animais.add(a);
+                animais.add(new Animal(
+                        resultSet.getInt("id"),
+                        resultSet.getString("nome"),
+                        resultSet.getString("especie"),
+                        resultSet.getString("raca"),
+                        resultSet.getDate("data_nascimento").toLocalDate(),
+                        resultSet.getDouble("peso"),
+                        resultSet.getInt("id_proprietario")
+                ));
             }
 
         } catch (SQLException e) {
@@ -32,16 +39,24 @@ public class AnimalDAO implements IDAO<Animal> {
     public Animal getById(int id) {
         String sql = """
                     SELECT
-                        a.id, a.nome, a.especie, a.raca, a.data_nascimento, a.peso
+                        a.id, a.nome, a.especie, a.raca, a.data_nascimento, a.peso, a.id_proprietario
                     FROM animal a
                     WHERE a.id = ?;
                 """;
 
-        try (Connection connection = DatabaseHandler.getConnection(); PreparedStatement statement = connection.prepareStatement(sql);) {
+        try (Connection connection = DatabaseHandler.getConnection(); PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setObject(1, id);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (!resultSet.next()) return null;
-                return new Animal(resultSet.getInt("id"), resultSet.getString("nome"), resultSet.getString("especie"), resultSet.getString("raca"), resultSet.getDate("data_nascimento").toLocalDate(), resultSet.getDouble("peso"));
+                return new Animal(
+                        resultSet.getInt("id"),
+                        resultSet.getString("nome"),
+                        resultSet.getString("especie"),
+                        resultSet.getString("raca"),
+                        resultSet.getDate("data_nascimento").toLocalDate(),
+                        resultSet.getDouble("peso"),
+                        resultSet.getInt("id_proprietario")
+                );
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -69,20 +84,20 @@ public class AnimalDAO implements IDAO<Animal> {
                     animal.setId(resultSet.getInt("id"));
                 }
             }
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
         return animal;
     }
 
     @Override
     public Animal update(int id, Animal animal) {
         String sql = """
-                    UPDATE animal SET nome = ?, especie = ?, raca = ?, data_nascimento = ?, peso = ?, id_proprietario = ?)
-                    WHERE id = ?;
+                UPDATE animal
+                SET nome = ?, especie = ?, raca = ?, data_nascimento = ?, peso = ?, id_proprietario = ?
+                WHERE id = ?;
                 """;
+
         try (Connection connection = DatabaseHandler.getConnection(); PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, animal.getNome());
             statement.setString(2, animal.getEspecie());
@@ -92,10 +107,14 @@ public class AnimalDAO implements IDAO<Animal> {
             statement.setInt(6, animal.getIdProprietario());
             statement.setInt(7, id);
 
+            int linhas = statement.executeUpdate();
+
+            if (linhas == 0) return null;
+            return getById(id);
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return getById(id);
     }
 
     @Override

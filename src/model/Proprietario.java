@@ -8,45 +8,17 @@ public class Proprietario {
 	private String  cpf;
 	private String email;
 	private String telefone;
-	
-	public Proprietario(int id, String nome, String cpf, String email, int id_telefone, String telefone) {
-		this.id = id;
-		this.nome = nome;
-		this.cpf = cpf;
-		this.email = email;
-		this.id_telefone = id_telefone;
-		this.telefone = telefone;
-	}
-	
-	public Proprietario(int id, String nome, String cpf, String email, String telefone) {
-		this.id = id;
-		this.nome = nome;
-		this.cpf = cpf;
-		this.email = email;
-		this.telefone = telefone;
-	}
-	
-	public Proprietario(String nome, String cpf, String email, String telefone) {
-		this.nome = nome;
-		this.cpf = cpf;
-		this.email = email;
-		this.telefone = telefone;
-	}
-	
-	public Proprietario(int id, String nome, String cpf, String email) {
-		this.id = id;
-		this.nome = nome;
-		this.cpf = cpf;
-		this.email = email;
-	}
-	
-	public Proprietario(String nome, String cpf, String email) {
-		this.nome = nome;
-		this.cpf = cpf;
-		this.email = email;
-	}
 
-	public int getId() {
+    public Proprietario(int id, int id_telefone, String nome, String cpf, String email, String telefone) {
+        this.id = id;
+        this.id_telefone = id_telefone;
+        this.nome = nome;
+        this.cpf = cpf;
+        this.email = email;
+        this.telefone = telefone;
+    }
+
+    public int getId() {
 		return id;
 	}
 
@@ -93,19 +65,16 @@ public class Proprietario {
 	public void setTelefone(String telefone) {
 		this.telefone = telefone;
 	}
-	
-	public String toString() {
-		return "Id: " + id
-				+ "\nNome: " + nome
-				+ "\nCPF: " + cpf
-				+ "\nEmail: " + email
-				+ "\ntelefone: " + telefone;
-	}
 
-	
-	
-	
-
-	
-	
+    @Override
+    public String toString() {
+        return "Proprietario{" +
+                "id=" + id +
+                ", id_telefone=" + id_telefone +
+                ", nome='" + nome + '\'' +
+                ", cpf='" + cpf + '\'' +
+                ", email='" + email + '\'' +
+                ", telefone='" + telefone + '\'' +
+                '}';
+    }
 }

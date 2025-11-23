@@ -1,39 +1,58 @@
-import dao.AnimalDAO;
-import dao.ProprietarioDAO;
-import model.Animal;
-import model.Proprietario;
+import dao.*;
+import view.*;
 
-import java.time.LocalDate;
+import java.util.Scanner;
+
+import static utils.InputReader.readInt;
 
 public class Main {
     public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        AnimalDAO animalDAO = new AnimalDAO();
+        AnimalCLI animalCLI = new AnimalCLI(animalDAO, scanner);
+        ProprietarioDAO proprietarioDAO = new ProprietarioDAO();
+        ProprietarioCLI proprietarioCLI = new ProprietarioCLI(scanner, proprietarioDAO);
+        VeterinarioDAO veterinarioDAO = new VeterinarioDAO();
+        VeterinarioCLI veterinarioCLI = new VeterinarioCLI(scanner, veterinarioDAO);
+        ConsultaDAO consultaDAO = new ConsultaDAO();
+        ConsultaCLI consultaCLI = new ConsultaCLI(scanner, consultaDAO, animalDAO, veterinarioDAO);
+        EspecialidadeDAO especialidadeDAO = new EspecialidadeDAO();
+        EspecialidadeCLI especialidadeCLI = new EspecialidadeCLI(scanner, especialidadeDAO);
 
-        AnimalDAO animalDao = new AnimalDAO();
-        ProprietarioDAO propDAO = new ProprietarioDAO();
+        int option;
+        do {
+            System.out.println("===== MENU GERAL =====");
+            System.out.println("1 - Animal");
+            System.out.println("2 - Consulta");
+            System.out.println("3 - Proprietario");
+            System.out.println("4 - Veterinário");
+            System.out.println("5 - Especialidade");
+            System.out.println("0 - Sair");
+            System.out.print("Escolha uma opção: ");
+            option = readInt(scanner);
 
-        System.out.println(animalDao.getAll());
-
-        Animal a = new Animal("cachorro", "cachorro", "cachorro", LocalDate.of(2025, 10, 10), 20.0, 1);
-
-//        System.out.println(animalDao.create(a));
-        
-        Proprietario proprietario = new Proprietario("Adalton", "04117734599", "a@gmail.com", "719177-1512");
-        
-        //System.out.println(propDAO.create(proprietario));
-      
-        /*for(Proprietario prop : propDAO.getAll()) {
-        	System.out.println(prop);
-        	System.out.println();
-        }*/
-        
-        //System.out.println(propDAO.getById(1));
-        
-       System.out.println(propDAO.update(1, proprietario));
-        
-        
-        
-
-
-
+            switch (option) {
+                case 1:
+                    animalCLI.start();
+                    break;
+                case 2:
+                    consultaCLI.start();
+                    break;
+                case 3:
+                    proprietarioCLI.start();
+                    break;
+                case 4:
+                    veterinarioCLI.start();
+                    break;
+                case 5:
+                    especialidadeCLI.start();
+                    break;
+                case 0:
+                    System.out.println("Saindo...");
+                    break;
+                default:
+                    System.out.println("Opção inválida!");
+            }
+        } while (option != 0);
     }
 }
